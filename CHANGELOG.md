@@ -18,6 +18,19 @@ Each port versions independently. The spec has its own version line.
 
 ---
 
+## Port: Rust
+
+### [0.1.0] — 2026-05-13
+- First release.
+- Conformant: passes all 20 test vectors from `spec/vectors/`.
+- Brisca with easy + normal AI.
+- Zero runtime dependencies.
+- MSRV: Rust 1.70.
+- Public library API.
+- MIT license.
+
+---
+
 ## Port: TypeScript
 
 ### [0.1.0] — 2026-05-12

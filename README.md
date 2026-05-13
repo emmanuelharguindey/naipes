@@ -15,6 +15,7 @@ Available today: **brisca**. Coming soon: tute, mus, chinchón.
 ```bash
 pip install naipes                       # Python
 npm install -g @naipes-com/naipes        # Node.js
+cargo install naipes                     # Rust
 ```
 
 More installation options will be added over time. The gameplay experience is identical in all of them.
@@ -37,7 +38,9 @@ During play: `1`, `2`, or `3` to play a card from your hand; `q` to quit; `?` fo
 
 ## About the project
 
-`naipes` is built around a single canonical specification ([`spec/SPEC.md`](spec/SPEC.md)) that defines the rules, card values, trick logic, and CLI behaviour.
+`naipes` is built around a single canonical specification ([`spec/SPEC.md`](spec/SPEC.md)) that defines the rules, card values, trick logic, and CLI behaviour. Anyone can read it in five minutes.
+
+To keep gameplay identical across implementations in different languages, the repository includes 20 deterministic games in [`spec/vectors/`](spec/vectors/) that every implementation must reproduce trick by trick.
 
 ## Repository structure
 
@@ -46,7 +49,8 @@ naipes/
 ├── spec/                      # rules and reference games
 ├── ports/
 │   ├── python/                # Python implementation
-│   └── typescript/            # TypeScript implementation
+│   ├── typescript/            # TypeScript implementation
+│   └── rust/                  # Rust implementation
 ├── README.md
 └── ...
 ```

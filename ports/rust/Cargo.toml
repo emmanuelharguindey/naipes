@@ -1,0 +1,40 @@
+[package]
+name = "naipes"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+authors = ["Manuel Harguindey"]
+description = "Spanish card games on the command line. v0.1.0 ships brisca."
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/naipes-com/naipes"
+homepage = "https://github.com/naipes-com/naipes"
+keywords = ["cards", "brisca", "spanish-cards", "cli", "game"]
+categories = ["command-line-utilities", "games"]
+include = [
+    "src/**/*.rs",
+    "Cargo.toml",
+    "README.md",
+    "LICENSE",
+]
+
+[[bin]]
+name = "naipes"
+path = "src/main.rs"
+
+[lib]
+name = "naipes"
+path = "src/lib.rs"
+
+[dependencies]
+# Intentionally empty. Zero runtime dependencies.
+
+[dev-dependencies]
+# Only used by tests to load spec/vectors/*.json. Not shipped to users.
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = "symbols"

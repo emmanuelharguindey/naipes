@@ -1,0 +1,37 @@
+name: Rust port — publish to crates.io
+
+# Triggers on tags like rust-v0.1.0, rust-v0.1.1, rust-v0.2.0...
+on:
+  push:
+    tags:
+      - "rust-v*"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Verify tag matches Cargo.toml version
+        working-directory: ports/rust
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#rust-v}"
+          PKG_VERSION=$(grep '^version' Cargo.toml | head -1 | sed -E 's/version = "(.+)"/\1/')
+          echo "Tag version:     $TAG_VERSION"
+          echo "Package version: $PKG_VERSION"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "MISMATCH: refusing to publish."
+            exit 1
+          fi
+
+      - name: Run tests before publishing
+        working-directory: ports/rust
+        run: cargo test --verbose
+
+      - name: Publish to crates.io
+        working-directory: ports/rust
+        run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
