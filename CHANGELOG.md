@@ -15,3 +15,14 @@ Each port versions independently. The spec has its own version line.
 - CLI surface: `naipes [list|rules|play] ...`.
 - 20 test vectors for cross-port conformance.
 - All user-facing strings in English.
+
+---
+
+## Port: Python
+
+### [0.1.0] — 2026-05-12
+- First release.
+- Reference implementation: the test vectors are generated from this one.
+- Brisca with easy + normal AI.
+- Python 3.10+ supported.
+- MIT license.
