@@ -1,0 +1,194 @@
+{
+  "id": "v014",
+  "seed": 4,
+  "ai_level": "normal",
+  "human_plays": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "expected_result": {
+    "human": 38,
+    "ai": 82,
+    "outcome": "loss"
+  },
+  "expected_trick_log": [
+    {
+      "trick": 1,
+      "leader": "human",
+      "human_card": "RE",
+      "ai_card": "6O",
+      "winner": "human",
+      "points": 4
+    },
+    {
+      "trick": 2,
+      "leader": "human",
+      "human_card": "CC",
+      "ai_card": "7B",
+      "winner": "human",
+      "points": 3
+    },
+    {
+      "trick": 3,
+      "leader": "human",
+      "human_card": "SE",
+      "ai_card": "RB",
+      "winner": "human",
+      "points": 6
+    },
+    {
+      "trick": 4,
+      "leader": "human",
+      "human_card": "6E",
+      "ai_card": "SC",
+      "winner": "human",
+      "points": 2
+    },
+    {
+      "trick": 5,
+      "leader": "human",
+      "human_card": "CB",
+      "ai_card": "3B",
+      "winner": "ai",
+      "points": 13
+    },
+    {
+      "trick": 6,
+      "leader": "ai",
+      "human_card": "7O",
+      "ai_card": "6B",
+      "winner": "ai",
+      "points": 0
+    },
+    {
+      "trick": 7,
+      "leader": "ai",
+      "human_card": "3E",
+      "ai_card": "AsC",
+      "winner": "human",
+      "points": 21
+    },
+    {
+      "trick": 8,
+      "leader": "human",
+      "human_card": "4O",
+      "ai_card": "AsO",
+      "winner": "ai",
+      "points": 11
+    },
+    {
+      "trick": 9,
+      "leader": "ai",
+      "human_card": "CO",
+      "ai_card": "5C",
+      "winner": "ai",
+      "points": 3
+    },
+    {
+      "trick": 10,
+      "leader": "ai",
+      "human_card": "3O",
+      "ai_card": "4E",
+      "winner": "ai",
+      "points": 10
+    },
+    {
+      "trick": 11,
+      "leader": "ai",
+      "human_card": "2E",
+      "ai_card": "2C",
+      "winner": "human",
+      "points": 0
+    },
+    {
+      "trick": 12,
+      "leader": "human",
+      "human_card": "SO",
+      "ai_card": "7C",
+      "winner": "human",
+      "points": 2
+    },
+    {
+      "trick": 13,
+      "leader": "human",
+      "human_card": "6C",
+      "ai_card": "4B",
+      "winner": "human",
+      "points": 0
+    },
+    {
+      "trick": 14,
+      "leader": "human",
+      "human_card": "RO",
+      "ai_card": "7E",
+      "winner": "ai",
+      "points": 4
+    },
+    {
+      "trick": 15,
+      "leader": "ai",
+      "human_card": "RC",
+      "ai_card": "SB",
+      "winner": "ai",
+      "points": 6
+    },
+    {
+      "trick": 16,
+      "leader": "ai",
+      "human_card": "2B",
+      "ai_card": "5B",
+      "winner": "ai",
+      "points": 0
+    },
+    {
+      "trick": 17,
+      "leader": "ai",
+      "human_card": "4C",
+      "ai_card": "3C",
+      "winner": "ai",
+      "points": 10
+    },
+    {
+      "trick": 18,
+      "leader": "ai",
+      "human_card": "5O",
+      "ai_card": "2O",
+      "winner": "human",
+      "points": 0
+    },
+    {
+      "trick": 19,
+      "leader": "human",
+      "human_card": "AsB",
+      "ai_card": "CE",
+      "winner": "ai",
+      "points": 14
+    },
+    {
+      "trick": 20,
+      "leader": "ai",
+      "human_card": "5E",
+      "ai_card": "AsE",
+      "winner": "ai",
+      "points": 11
+    }
+  ]
+}
