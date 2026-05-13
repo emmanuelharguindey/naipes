@@ -10,8 +10,11 @@ Available today: **brisca**. Coming soon: tute, mus, chinchón.
 
 ## Installation
 
+`naipes` is available for several languages and package managers. Pick the one you already have installed:
+
 ```bash
 pip install naipes                       # Python
+npm install -g @naipes-com/naipes        # Node.js
 ```
 
 More installation options will be added over time. The gameplay experience is identical in all of them.
@@ -42,10 +45,13 @@ During play: `1`, `2`, or `3` to play a card from your hand; `q` to quit; `?` fo
 naipes/
 ├── spec/                      # rules and reference games
 ├── ports/
-│   └── python/                # Python implementation
+│   ├── python/                # Python implementation
+│   └── typescript/            # TypeScript implementation
 ├── README.md
 └── ...
 ```
+
+Each implementation is independent, idiomatic in its language, and shares the same specification.
 
 ## Contributing
 

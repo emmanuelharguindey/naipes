@@ -1,0 +1,58 @@
+name: TypeScript port — publish to npm
+
+# Triggers on tags like npm-v0.1.0, npm-v0.1.1, npm-v0.2.0...
+on:
+  push:
+    tags:
+      - "npm-v*"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    # Trusted publishing via OIDC. Configure at npmjs.com:
+    #   Packages → naipes → Settings → "Trusted publisher"
+    #   Provider: GitHub Actions
+    #   Owner: naipes-com
+    #   Repository: naipes
+    #   Workflow: npm-publish.yml
+    permissions:
+      id-token: write   # required for OIDC trusted publishing
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        working-directory: ports/typescript
+        run: npm install
+
+      - name: Compile TypeScript
+        working-directory: ports/typescript
+        run: npx tsc
+
+      - name: Run tests before publishing
+        working-directory: ports/typescript
+        run: npx tsx --test tests/*.test.ts
+
+      - name: Verify tag matches package version
+        working-directory: ports/typescript
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#npm-v}"
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "Tag version:     $TAG_VERSION"
+          echo "Package version: $PKG_VERSION"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "MISMATCH: refusing to publish."
+            exit 1
+          fi
+
+      - name: Publish to npm
+        working-directory: ports/typescript
+        run: npm publish --provenance --access public

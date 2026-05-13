@@ -18,6 +18,18 @@ Each port versions independently. The spec has its own version line.
 
 ---
 
+## Port: TypeScript
+
+### [0.1.0] — 2026-05-12
+- First release on npm as `@naipes-com/naipes` (the plain `naipes` name was blocked by npm's similarity filter against `natives`).
+- Conformant: passes all 20 test vectors from `spec/vectors/`.
+- Brisca with easy + normal AI.
+- Node 20+ supported. ESM only.
+- Public TypeScript types exported for programmatic use.
+- MIT license.
+
+---
+
 ## Port: Python
 
 ### [0.1.0] — 2026-05-12

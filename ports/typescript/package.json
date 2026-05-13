@@ -1,0 +1,54 @@
+{
+  "name": "naipes",
+  "version": "0.1.0",
+  "description": "Spanish card games on the command line. v0.1.0 ships brisca.",
+  "type": "module",
+  "bin": {
+    "naipes": "dist/cli/bin.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test --import tsx tests/*.test.ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build && npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "cards",
+    "brisca",
+    "spanish-cards",
+    "cli",
+    "game"
+  ],
+  "author": "Manuel Harguindey",
+  "license": "MIT",
+  "homepage": "https://github.com/naipes-com/naipes",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naipes-com/naipes.git",
+    "directory": "ports/typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/naipes-com/naipes/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}
