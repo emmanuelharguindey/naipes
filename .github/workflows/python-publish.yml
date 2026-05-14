@@ -1,0 +1,64 @@
+name: Python port — publish to PyPI
+
+# Triggers on tags like python-v0.1.1, python-v0.2.0...
+on:
+  push:
+    tags:
+      - "python-v*"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    # Trusted Publishing requires id-token: write so the runner can request
+    # a short-lived OIDC token from GitHub that PyPI will verify.
+    # No PYPI_API_TOKEN secret is needed.
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify tag matches pyproject.toml version
+        working-directory: ports/python
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#python-v}"
+          PKG_VERSION=$(grep '^version' pyproject.toml | head -1 | sed -E 's/version = "(.+)"/\1/')
+          echo "Tag version:     $TAG_VERSION"
+          echo "Package version: $PKG_VERSION"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "MISMATCH: refusing to publish."
+            exit 1
+          fi
+
+      - name: Install build tooling
+        working-directory: ports/python
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Run tests before publishing
+        working-directory: ports/python
+        run: |
+          pip install -e .
+          pip install pytest
+          pytest tests/ -v
+
+      - name: Build distributions (wheel + sdist)
+        working-directory: ports/python
+        run: python -m build
+
+      # Trusted Publishing: pypa/gh-action-pypi-publish requests an OIDC
+      # token from GitHub and exchanges it with PyPI. PyPI validates that
+      # the workflow matches its configured Trusted Publisher and accepts
+      # the upload. No API token is involved.
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: ports/python/dist/

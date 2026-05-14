@@ -1,0 +1,53 @@
+name: Python port — tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ports/python/**"
+      - "spec/vectors/**"
+      - ".github/workflows/python-test.yml"
+  pull_request:
+    paths:
+      - "ports/python/**"
+      - "spec/vectors/**"
+      - ".github/workflows/python-test.yml"
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package and test deps
+        working-directory: ports/python
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest
+
+      - name: Run tests
+        working-directory: ports/python
+        run: pytest tests/ -v
+
+      - name: Quick CLI smoke test
+        working-directory: ports/python
+        shell: bash
+        run: |
+          naipes --version
+          naipes list
+          # Scripted 20-turn game; check deterministic RESULT line.
+          OUT=$(printf '1\n%.0s' {1..20} | naipes play brisca --seed 42 --quiet | tail -1)
+          echo "Got: $OUT"
+          [ "$OUT" = "RESULT human=40 ai=80 outcome=loss" ] || (echo "DETERMINISM BROKEN"; exit 1)
