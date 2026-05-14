@@ -1,0 +1,100 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# --- Virtual envs ---
+venv/
+.venv/
+env/
+.env
+
+# --- Rust ---
+target/
+**/*.rs.bk
+# Note: Cargo.lock is committed (recommended for crates with binaries).
+# https://doc.rust-lang.org/cargo/faq.html#why-have-cargolock-in-version-control
+
+# --- Node / npm (para el TypeScript port, futuro) ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+dist-js/
+
+# --- Ruby (futuro) ---
+*.gem
+.bundle/
+Gemfile.lock
+vendor/bundle/
+
+# --- .NET (futuro) ---
+bin/
+obj/
+*.user
+
+# --- Elixir (futuro) ---
+_build/
+deps/
+*.ez
+
+# --- Dart (futuro) ---
+.dart_tool/
+.packages
+pubspec.lock
+
+# --- R (futuro) ---
+.Rhistory
+.RData
+.Rproj.user/
+*.Rcheck/
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- Secrets ---
+.pypirc
+*.pem
+*.key
+.env.local
+secrets/
