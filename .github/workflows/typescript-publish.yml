@@ -15,7 +15,7 @@ jobs:
     #   Provider: GitHub Actions
     #   Owner: naipes-com
     #   Repository: naipes
-    #   Workflow: npm-publish.yml
+    #   Workflow: typescript-publish.yml
     permissions:
       id-token: write   # required for OIDC trusted publishing
       contents: read
