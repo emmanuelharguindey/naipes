@@ -1,14 +1,10 @@
 # Multi-stage Dockerfile for the naipes Rust CLI.
 #
 # Stage 1 (builder): compile the binary from source using the official
-# Rust toolchain. We use the slim variant of the official image to keep
-# the build stage smaller.
+# Rust toolchain.
 #
 # Stage 2 (runtime): copy only the compiled binary into a minimal
-# Debian slim image. We use debian:bookworm-slim instead of scratch
-# because the binary may depend on glibc and CA certificates, and
-# alpine would require musl-target compilation. bookworm-slim gives
-# us a small, well-supported runtime (~80MB total image).
+# Debian slim image (~80MB total).
 
 # ============================================================
 # Stage 1: builder
@@ -17,21 +13,16 @@ FROM rust:1.83-slim-bookworm AS builder
 
 WORKDIR /build
 
-# Copy manifest first to leverage Docker layer caching:
-# if Cargo.toml/Cargo.lock don't change, dependencies don't rebuild.
+# Copy the full source tree.
+# We don't use the "compile dependencies first" caching trick because
+# this crate has both [lib] and [[bin]] targets, which makes the
+# dummy-src approach unreliable. Plain copy-then-build is simpler
+# and equally correct for our release cadence.
 COPY Cargo.toml Cargo.lock ./
-
-# Create a dummy src/main.rs to compile dependencies in isolation.
-# This is the standard Rust Docker pattern for dependency caching.
-RUN mkdir -p src && \
-    echo "fn main() {}" > src/main.rs && \
-    cargo build --release --locked && \
-    rm -rf src target/release/naipes target/release/naipes.d
-
-# Now copy the actual source code and build.
 COPY src ./src
 COPY tests ./tests
 
+# Build in release mode with locked dependencies for reproducibility.
 RUN cargo build --release --locked && \
     strip target/release/naipes
 
