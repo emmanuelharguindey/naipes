@@ -1,0 +1,96 @@
+name: Rust port — publish to Docker Hub
+
+# Triggers:
+# 1. Tag push (rust-vX.Y.Z) — same pattern as crates.io publication.
+#    Both crates.io and Docker Hub publish together for each Rust release.
+# 2. Manual dispatch from GitHub UI — allows publishing a Docker image
+#    on demand without a new tag. Useful for the first publication or
+#    for re-publishing after Dockerfile changes.
+
+on:
+  push:
+    tags:
+      - "rust-v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag to use (e.g., 0.1.0)"
+        required: true
+        default: "0.1.0"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Compute version from either tag or manual input.
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            VERSION="${GITHUB_REF_NAME#rust-v}"
+          else
+            VERSION="${{ inputs.version }}"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Version to publish: $VERSION"
+
+      # Optional: verify Cargo.toml version matches (only on tag push).
+      - name: Verify tag matches Cargo.toml version
+        if: github.event_name == 'push'
+        working-directory: ports/rust
+        run: |
+          PKG_VERSION=$(grep '^version' Cargo.toml | head -1 | sed -E 's/version = "(.+)"/\1/')
+          if [ "${{ steps.version.outputs.version }}" != "$PKG_VERSION" ]; then
+            echo "MISMATCH: tag says ${{ steps.version.outputs.version }} but Cargo.toml says $PKG_VERSION"
+            exit 1
+          fi
+
+      # Set up QEMU for multi-arch builds (arm64 from amd64 runner).
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # Set up Buildx for advanced features (multi-platform, cache, etc.).
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Generate image tags: 0.1.0, 0.1, latest.
+      - name: Compute Docker tags
+        id: tags
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          MAJOR_MINOR=$(echo "$VERSION" | cut -d. -f1,2)
+          TAGS="naipes/naipes:$VERSION,naipes/naipes:$MAJOR_MINOR,naipes/naipes:latest"
+          echo "tags=$TAGS" >> "$GITHUB_OUTPUT"
+          echo "Tags: $TAGS"
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ports/rust
+          file: ports/rust/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.tags.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          labels: |
+            org.opencontainers.image.title=naipes
+            org.opencontainers.image.description=CLI for traditional card games (brisca, tute, mus, chinchón)
+            org.opencontainers.image.url=https://naipes.com
+            org.opencontainers.image.source=https://github.com/naipes-com/naipes
+            org.opencontainers.image.version=${{ steps.version.outputs.version }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.authors=Manuel Harguindey
